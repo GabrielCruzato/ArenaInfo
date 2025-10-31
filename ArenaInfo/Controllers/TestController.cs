@@ -25,5 +25,23 @@ namespace ArenaInfo.Controllers
 
             return Ok(new { access_token = token });
         }
+
+        [HttpGet("seasons")]
+        public async Task<IActionResult> GetSeasons()
+        {
+            try
+            {
+                var seasons = await _blizzardService.GetPvpSeasonIndexAsync();
+
+                if (seasons == null)
+                    return NotFound("No seasons found");
+
+                return Ok(seasons);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
     }
 }
